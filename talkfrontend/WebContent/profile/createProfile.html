@@ -1,0 +1,57 @@
+<body ng-app="myApp" class="ng-cloak">
+	<div class="generic-container" ng-controller="BlogController as ctrl">
+	<div class="formcontainer">
+					<form ng-submit="ctrl.submit()" name="myForm"
+						class="form-horizontal">
+						<label>Create Blog...</label>
+						<div class="row">
+							<div class="form-group col-md-12">
+								<label class="col-md-2 control-lable" for="id">ID</label>
+								<div class="col-md-7">
+									<input type="text" ng-model="ctrl.blog.id" id="id"
+										class=" form-control input-sm"
+										placeholder="Enter your blogid" required ng-minlength="3" />
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-12">
+								<label class="col-md-2 control-lable" for="title">Title</label>
+								<div class="col-md-7">
+									<input type="text" ng-model="ctrl.blog.title" id="title"
+										class=" form-control input-sm"
+										placeholder="Give a title" required ng-minlength="3" />
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-12">
+								<label class="col-md-2 control-lable" for="Description">Description</label>
+								<div class="col-md-7">
+									<input type="text" ng-model="ctrl.blog.description" id="description"
+										class=" form-control input-sm"
+										placeholder="Describe your blog" required ng-minlength="3" />
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-actions floatRight">
+								<input type="submit" value="Submit"
+									class="btn btn-primary btn-sm">
+									</div>
+									</div>
+									
+						</form>
+						</div>
+					
+						</div>
+						<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    
+		<script src="c_blog/BlogController.js"></script>
+		<script src="c_blog/BlogService.js"></script>
+	
+</body>
+</html>
+						
+						</body>
+						

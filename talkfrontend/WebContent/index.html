@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+
+<link rel="import" href="head-meta.html">
+
+</head>
+
+<script src="app.js"></script>
+<script src="indexService.js"></script>
+<script src="indexController.js"></script>
+
+<script src="blogs/BlogService.js"></script>
+<script src="blogs/BlogController.js"></script>
+
+<script src="forums/ForumService.js"></script>
+<script src="forums/ForumController.js"></script>
+
+<script src="profile/ProfileService.js"></script>
+<script src="profile/ProfileController.js"></script>
+
+<script src="friends/FriendService.js"></script>
+<script src="friends/FriendController.js"></script>
+
+<script src="events/EventService.js"></script>
+<script src="events/EventController.js"></script>
+
+<script src="jobs/JobService.js"></script>
+<script src="jobs/JobController.js"></script>
+
+<script src="chat/ChatService.js"></script>
+<script src="chat/ChatController.js"></script>
+
+<script src="groupchat/GroupChatService.js"></script>
+<script src="groupchat/GroupChatController.js"></script>
+
+<body>
+
+	<nav class="navbar navbar-default" ng-controller="indexController">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#myNavbar">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<h1 style="margin-left: 80px">
+					<a href="#/"><img src="resources/images/logomin.png"
+						alt="logo" width="50" height="50"> </a>Talk
+				</h1>
+
+			</div>
+			<div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav navbar-left" ng-show="LoginStatus">
+
+
+					<li><a href="#/aboutus" title="About Us"><i
+							class="fa fa-info-circle " aria-hidden="true"></i></a></li>
+
+				</ul>
+
+				<ul class="nav navbar-nav navbar-left" ng-show="!LoginStatus">
+
+
+
+				</ul>
+
+				<ul class="nav navbar-nav navbar-right">
+					<li>
+						<div class="container-fluid">
+
+							<div class="row" ng-show="LoginStatus">
+
+								<div class="col-md-4">
+									<br/>
+									<input type="text" class="form-control" name="username"
+										placeholder="Enter email" ng-model="LoginEmail">
+
+								</div>
+
+								<div class="col-md-4">
+										<br/>
+									<input type="password" class="form-control" name="password"
+										placeholder="Enter password" ng-model="LoginPassword">
+								</div>
+
+								<div class="col-md-4">
+									<br/>
+									<input type="button" class="btn btn-primary" value="Login"
+										ng-click="Login()">
+								</div>
+
+							</div>
+
+							<div class="row" ng-show="!LoginStatus">
+
+
+
+								<div class="col-md-4">
+									<br><b>Welcome</b>
+										{{LoginEmail}}
+									
+								</div>
+
+
+								<div class="col-md-4 ">
+								</div>
+
+								<div class="col-md-4 pull-left">
+								<br>
+									<button class="btn btn-danger " ng-click="logout()">
+										<i class="fa fa-power-off"></i>
+									</button>
+
+								</div>
+							</div>
+
+
+
+
+							<div class="row" ng-show="InvalidLogin">
+
+								<br>
+
+								<div class="col-md-12">
+									<span class="alert alert-danger"
+										style="width: 100%; margin: auto;">Invalid Login</span>
+								</div>
+
+								<br> <br>
+							</div>
+
+						</div>
+
+
+					</li>
+				</ul>
+
+			</div>
+		</div>
+	</nav>
+
+
+	<div ng-view></div>
+
+
+
+
+	<div class="footer">
+
+		Copyright&copy 2016 - <strong>Talk</strong>
+
+	</div>
+
+
+</body>
+
+
+</body>
+</html>

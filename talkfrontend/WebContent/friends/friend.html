@@ -1,0 +1,234 @@
+
+<body ng-app="myApp" ng-controller="FriendController" class="ng-cloak">
+
+
+
+	<div class="container">
+
+		<div ng-if="(countfriendrequests > 0)"
+			class="col-md-4 col-md-offset-4">
+			<button class="btn btn-success btn-block"
+				ng-click="viewFriendRequset();">
+				Friend Requests &nbsp <span class="badge">{{countfriendrequests}}</span>
+			</button>
+		</div>
+
+		<div class="col-md-6 col-md-offset-3">
+			<div class="panel-group" ng-show="friendrequest">
+				<div class="panel panel-default" ng-repeat="user in friendrequest"
+					style="margin-top: 40px">
+
+					<div class="panel-body">
+						<img
+							ng-src="
+								resources/images/{{user.friendId.email}}.jpg "
+							class="img-circle" style="float: left; margin-right: 20px"
+							width="80" height="80"
+							onerror="this.src='resources/images/user.jpg'" width="80"
+							height="80" id="sm_profilepic" /> <span
+							style="font-size: x-large">{{user.friendId.username}}</span></br> <i
+							class="fa fa-map-marker" aria-hidden="true"></i>&nbsp&nbsp{{user.friendId.city}}
+
+						<div ng-if="user.friendId.gender == 'Male'">
+							<i class="fa fa-mars" aria-hidden="true"></i> &nbsp
+							{{user.friendId.gender}}
+						</div>
+
+						<div ng-if="user.friendId.gender == 'Female'">
+							<i class="fa fa-mars" aria-hidden="true"></i> &nbsp
+							{{user.friendId.gender}}
+
+						</div>
+					</div>
+
+					<div class="panel-footer">
+						<button class="btn btn-success btn-sm"
+							ng-click="acceptFriendRequset(user.friendId.userId);">
+							<i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp ACCEPT
+						</button>
+
+						<button class="btn btn-danger btn-sm pull-right"
+							ng-click="rejectFriendRequset(user.friendId.userId);">
+							<i class="fa fa-user-times" aria-hidden="true"></i>&nbsp REJECT
+						</button>
+
+					</div>
+				</div>
+
+				<hr />
+
+
+			</div>
+		</div>
+
+	</div>
+
+
+	<div class="container">
+
+		<h1>Friends</h1>
+
+		<div class="col-md-6 col-md-offset-3">
+
+
+			<div class="panel-group" ng-show="friends">
+				<div class="panel panel-default" ng-repeat="user in friends"
+					style="margin-top: 20px">
+
+					<div ng-if="user.status == 'ACCEPTED'">
+
+						<div class="panel-body">
+							<img
+								ng-src="
+							http://localhost:1111/talkbackend/resources/images/{{user.friendId.email}}.jpg "
+								class="img-circle" style="float: left; margin-right: 20px"
+								width="120" height="120"
+								onerror="this.src='resources/images/user.jpg'" width="120"
+								height="120" id="sm_profilepic" /> <span
+								style="font-size: x-large">{{user.friendId.username}}</span><br>
+							<i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp&nbsp{{user.friendId.email}}<br />
+
+							<i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp&nbsp{{user.friendId.city}}<br />
+
+							<i class="fa fa-phone" aria-hidden="true"></i>&nbsp&nbsp{{user.friendId.phone}}<br />
+							<i class="fa fa-birthday-cake" aria-hidden="true"></i>&nbsp&nbsp{{user.friendId.dob
+							| date:"MM/dd/yyyy"}}
+
+							<div ng-if="user.friendId.gender == 'Male'">
+								<i class="fa fa-mars" aria-hidden="true"></i> &nbsp
+								{{user.friendId.gender}}
+							</div>
+
+							<div ng-if="user.friendId.gender == 'Female'">
+								<i class="fa fa-mars" aria-hidden="true"></i> &nbsp
+								{{user.friendId.gender}}
+
+							</div>
+
+
+
+						</div>
+
+						<div class="panel-footer">
+							<div class="btn-group">
+								<a href="#/profile/{{user.email}}"
+									class="btn btn-default btn-sm">View Profile</a> <a
+									href="#/blogs/{{user.email}}" class="btn btn-default btn-sm">View
+									Blogs</a>
+							</div>
+							<div class="pull-right">
+								<a href="#/chat/{{user.friendId.email}}"
+									class="btn btn-primary btn-sm">Chat</a>
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<h1>People</h1>
+		<div class="col-md-6 col-md-offset-3">
+			<div class="col-md-12">
+				<div ng-show="status">
+					<p class="alert alert-info">
+						<b>Success!</b>&nbsp{{status}}<br />
+					</p>
+				</div>
+
+				<input type="text" class="form-control"
+					placeholder="Search for people....." ng-model="searchText">
+
+				<div class="panel-group" ng-show="allusers">
+					<div class="panel panel-default"
+						ng-repeat="user in allusers | filter:searchText as results"
+						style="margin-top: 40px">
+
+						<div class="panel-body">
+				
+							<img ng-src="
+							http://localhost:1111/talkbackend/resources/images/{{user.email}}.jpg "
+								class="img-circle" style="float: left; margin-right: 20px"
+								width="80" height="80"
+								onerror="this.src='resources/images/user.jpg'" width="80"
+								height="80" id="sm_profilepic" /> <span
+								style="font-size: x-large">{{user.username}}</span><br> <i
+								class="fa fa-map-marker" aria-hidden="true"></i>&nbsp&nbsp{{user.city}}
+
+							<div ng-if="user.gender == 'Male'">
+								<i class="fa fa-mars" aria-hidden="true"></i> {{user.gender}}
+							</div>
+
+
+
+							<div ng-if="user.gender == 'Female'">
+								<i class="fa fa-venus" aria-hidden="true"></i> {{user.gender}}
+
+							</div>
+							</div>
+							<div class="panel-footer">
+
+								<div
+									ng-if="( user.isFriend != 'ACCEPTED' && user.isFriend != 'NEW' )">
+
+									<button class="btn btn-success btn-sm"
+										ng-click="sendFriendRequset(user.userId)">
+										<i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp Send
+										Request
+									</button>
+								</div>
+
+								<div ng-if="( user.isFriend == 'NEW' )">
+
+									<button class="btn btn-primary btn-sm"
+										ng-click="removeFriendRequset(user.userId)">
+										<i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp Undo
+										Request
+									</button>
+								</div>
+
+								<div ng-if="( user.isFriend == 'ACCEPTED' )">
+
+									<button class="btn btn-danger btn-sm"
+										ng-click="removeFriendRequset(user.userId)">
+										<i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp Remove
+										Friend
+									</button>
+								</div>
+								
+								<br>
+
+								<div class="btn-group ">
+
+									<a href="#/profile/{{user.email}}"
+										class="btn btn-default btn-sm">View Profile</a> <a
+										href="#/blogs/{{user.email}}" class="btn btn-default btn-sm">View
+										Blogs</a>
+
+								</div>
+							
+						</div>
+					</div>
+
+
+					<!-- if no result is found -->
+					<div ng-if="results.length === 0" style="margin-top: 20px">
+
+						<span class="alert alert-info"> <i
+							class="fa fa-info-circle" aria-hidden="true"></i>&nbspNo results
+							found...
+						</span>
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
+
+</body>

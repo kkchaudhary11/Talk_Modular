@@ -1,0 +1,416 @@
+
+<body ng-app="myApp" ng-controller="ProfileController" class="ng-cloak">
+
+	<!--  -->
+
+
+	<div class="container">
+
+		<div class="col-md-3">
+
+
+			<div style="margin-top:40px">
+				<div ng-if="time<12">
+					<img alt="good morning" ng-src="resources/images/morning.jpg"
+						width="50" height="50"> Good Morning
+				</div>
+
+				<div ng-if="time>=12 && time<=17">
+					<img alt="good morning" ng-src="resources/images/afternoon.jpg"
+						width="50" height="50"> <span>Good Afternoon</span>
+				</div>
+
+				<div ng-if="time>17 && time<24">
+					<img alt="good morning" ng-src="resources/images/evening.jpg"
+						width="50" height="50">Good
+						Evening</span>
+				</div>
+			</div>
+		</div>
+
+
+
+
+		<div class="col-md-3 text-center">
+			<div ng-if="userdetails.gender == 'Male'">
+
+				<img ng-src="{{userdetails.Image}}" width="150" height="150"
+					id="profilepic" onerror="this.src='resources/images/male_dummy.jpg'">
+			</div>
+			<div ng-if="userdetails.gender == 'Female'">
+				<img ng-src="{{userdetails.Image}}" width="150" height="150"
+					id="profilepic"
+					onerror="this.src='resources/images/female_dummy.jpg'">
+			</div>
+
+
+
+
+			<div ng-show="!secondUser">
+				<button type="button" class="btn btn-link"
+					ng-click="openFileChooser();">Change Picture</button>
+
+				<input type="file" id="trigger" ng-show="false"
+					onchange="angular.element(this).scope().setFile(this)"
+					accept="image/*" file-model="myFile" />
+
+
+				<button ng-show="secondUser == null" ng-click="DeletePic();"
+					class="btn btn-danger btn-sm" title="delete picture"
+					ng-disabled="picDeleted">
+					<i class="fa fa-trash-o fa-1x" aria-hidden="true"></i>
+				</button>
+
+
+
+
+			</div>
+
+
+
+		</div>
+
+		<div class="col-md-3 text-center">
+
+
+			<div style="display: inline-block;">
+
+				<div style="text-align: left">
+
+					<div ng-hide="userdetails">
+						<i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i> <span
+							class="sr-only">Loading...</span>
+					</div>
+					<div>
+						<span style="font-size: xx-large"> {{userdetails.username}}</span>
+					</div>
+
+					<div>
+						<i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp
+						{{userdetails.email}}
+					</div>
+					<div>
+						<i class="fa fa-phone" aria-hidden="true"></i> &nbsp
+						{{userdetails.phone}}
+					</div>
+
+					<div>
+						<i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp&nbsp
+						{{userdetails.city}}
+					</div>
+
+					<div>
+						<i class="fa fa-birthday-cake" aria-hidden="true"></i>&nbsp
+						{{userdetails.dob | date:"MM/dd/yyyy"}}
+					</div>
+
+					<div ng-if="userdetails.gender == 'Male'">
+						<i class="fa fa-mars" aria-hidden="true"></i> &nbsp
+						{{userdetails.gender}}
+					</div>
+
+					<div ng-if="userdetails.gender == 'Female'">
+						<i class="fa fa-venus" aria-hidden="true"></i> &nbsp
+						{{userdetails.gender}}
+					</div>
+
+					<div ng-show="status">
+						<p class="alert alert-info">
+							<i class="fa fa-check-circle" aria-hidden="true"></i>&nbsp
+							&nbsp{{status}}<br />
+						</p>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+
+		<div class="col-md-3" ng-show="!secondUser">
+			<button type="button" class="btn btn-default btn-sm"
+				data-toggle="modal" data-target="#myModal2">Change Password</button>
+			<br /> <br />
+
+			<button type="button" class="btn btn-default btn-sm"
+				data-toggle="modal" data-target="#myModal">Update Info</button>
+
+		</div>
+
+
+
+		<!-- Modal for update password -->
+		<div class="modal fade" id="myModal2" role="dialog">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Update Details</h4>
+					</div>
+					<div class="modal-body">
+						<form name="form2" action="#">
+
+
+							<div class="form-group"
+								ng-class="{ 'has-error': form2.current_password.$dirty && form2.current_password.$error.required }">
+
+								<div class="input-group" style="margin-top: 20px">
+									<span class="input-group-addon"><i
+										class="fa fa-unlock-alt" aria-hidden="true"></i></span> <input
+										type="password" class="form-control" name="current_password"
+										id="current_password" placeholder="Enter current password"
+										ng-model="userdetails.currentpassword" required />
+								</div>
+								<span
+									ng-show="form2.current_password.$dirty && form2.current_password.$error.required"
+									class="help-block">Current Password is required</span>
+							</div>
+
+							<div
+								ng-if="(userdetails.password != userdetails.currentpassword && form2.current_password.$dirty)">
+								<span class="text-danger">Password is Incorrect</span>
+							</div>
+
+
+							<div class="form-group"
+								ng-class="{ 'has-error': form2.new_password.$dirty && form2.new_password.$error.required }">
+
+								<div class="input-group" style="margin-top: 20px">
+									<span class="input-group-addon"><i class="fa fa-lock"
+										aria-hidden="true"></i></span> <input type="password"
+										class="form-control" name="new_password" id="new_password"
+										placeholder="Enter new password"
+										ng-model="userdetails.newpassword" required />
+								</div>
+								<span
+									ng-show="form2.new_password.$dirty && form2.new_password.$error.required"
+									class="help-block">New Password is required</span>
+							</div>
+							<div class="form-group"
+								ng-class="{ 'has-error': form2.cnfrm_new_password.$dirty && form2.cnfrm_new_password.$error.required }">
+
+								<div class="input-group" style="margin-top: 20px">
+									<span class="input-group-addon"><i class="fa fa-lock"
+										aria-hidden="true"></i></span> <input type="password"
+										class="form-control" name="cnfrm_new_password"
+										id="cnfrm_new_password" placeholder="Re-enter new password"
+										ng-model="userdetails.cnfrmnewpassword" required />
+								</div>
+								<span
+									ng-show="form2.cnfrm_new_password.$dirty && form2.cnfrm_new_password.$error.required"
+									class="help-block">New Password is required</span>
+							</div>
+
+
+							<div
+								ng-if="(userdetails.newpassword != userdetails.cnfrmnewpassword && form2.new_password.$dirty && form2.cnfrm_new_password.$dirty)">
+								<span class="text-danger">Password Not Match</span>
+							</div>
+
+
+							<div class="modal-footer" style="margin-top: 20px">
+								<input type="submit" ng-click="updatePassword()" value="Save"
+									class="btn btn-primary" data-dismiss="modal"
+									ng-disabled="form2.current_password.$error.required || form2.new_password.$error.required || form2.cnfrm_new_password.$error.required || userdetails.password != userdetails.currentpassword || userdetails.newpassword != userdetails.cnfrmnewpassword">
+							</div>
+
+
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+		<!-- Modal for update user details -->
+
+		<div class="modal fade" id="myModal" role="dialog">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Update Details</h4>
+					</div>
+					<div class="modal-body">
+						<form name="form" action="#">
+
+
+							<div class="form-group"
+								ng-class="{ 'has-error': form.username.$dirty && form.username.$error.required }">
+
+								<div class="input-group" style="margin-top: 20px">
+									<span class="input-group-addon"><i class="fa fa-user "
+										aria-hidden="true"></i></span> <input type="text"
+										class="form-control" name="username" id="username"
+										ng-model="userdetails.username" ng-value=userdetails.username
+										required />
+								</div>
+								<span
+									ng-show="form.username.$dirty && form.username.$error.required"
+									class="help-block">Username is required</span>
+							</div>
+
+							<div class="input-group" style="margin-top: 20px">
+								<span class="input-group-addon"><i class="fa fa-phone "
+									aria-hidden="true"></i></span> <input type="tel" class="form-control"
+									ng-value=userdetails.phone ng-model="userdetails.phone" />
+							</div>
+							<div class="input-group" style="margin-top: 20px">
+								<span class="input-group-addon"><i
+									class="fa fa-map-marker fa-lg" aria-hidden="true"></i></span> <input
+									type="text" class="form-control" ng-value=userdetails.city
+									ng-model="userdetails.city" />
+							</div>
+
+							<div class="input-group" style="margin-top: 20px">
+								<span class="input-group-addon"><i class="fa fa-calendar"
+									aria-hidden="true"></i></span> <input type="text" class="form-control"
+									ng-model="userdetails.dob" />
+							</div>
+
+							<div class="input-group" style="margin-top: 20px">
+								<input type="radio" name="gender" ng-model="userdetails.gender"
+									value="Male"> Male &nbsp <input type="radio"
+									ng-model="userdetails.gender" name="gender" value="Female">
+								Female<br>
+							</div>
+
+
+							<div class="modal-footer" style="margin-top: 20px">
+								<input type="submit" ng-click="updateUser()" value="Save"
+									class="btn btn-primary" data-dismiss="modal"
+									ng-disabled="form.username.$dirty && form.username.$error.required">
+							</div>
+
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+	</div>
+	<hr>
+
+	<div class="container">
+		<div class="col-md-4 " style="margin-top: 30px">
+
+
+			<a href="#/blogs" class="btn btn-success btn-block btn-outline"> <img
+				src="resources/images/blog.png" alt="logo" width="40" height="40">&nbsp
+				<b>Blog</b>
+			</a>
+		</div>
+
+		<div class="col-md-4" style="margin-top: 30px">
+
+			<a href="#/friends" class="btn btn-success btn-block btn-outline"><img
+				src="resources/images/friend.png" alt="logo" width="50" height="40">&nbsp
+				<b>Friends</b></a>
+		</div>
+		<!-- 	<div class="col-md-4" style="margin-top: 30px">
+
+			<a href="#/chat" class="btn btn-danger btn-block btn-outline"><img
+				src="resources/images/gc.png"
+				alt="chat" width="40" height="40">&nbsp <b> Chat</b></a>
+		</div> -->
+		<div class="col-md-4" style="margin-top: 30px">
+
+			<a href="#/forums" class="btn btn-success btn-block btn-outline"><img
+				src="resources/images/forum.png" alt="event" width="40" height="40">&nbsp
+				<b>Forum</b></a>
+		</div>
+		<div class="col-md-4" style="margin-top: 30px">
+
+			<a href="#/events" class="btn btn-success btn-block btn-outline">
+				<img src="resources/images/event.png" alt="logo" width="40"
+				height="40">&nbsp <b>Events</b>
+			</a>
+		</div>
+		<div class="col-md-4" style="margin-top: 30px">
+
+			<a href="#/jobs" class="btn btn-success btn-block btn-outline"> <img
+				src="resources/images/job.png" alt="logo" width="40" height="40">&nbsp
+				<b>Jobs</b>
+			</a>
+		</div>
+		<div class="col-md-4" style="margin-top: 30px">
+
+			<a href="#/groupchat" class="btn btn-success btn-block btn-outline">
+				<img src="resources/images/group-chat.png" alt="logo" width="40"
+				height="40">&nbsp <b>Group Chat</b>
+			</a>
+		</div>
+	</div>
+
+
+
+
+	<div ng-if="(currentUserRole == 'ROLE_ADMIN')">
+	<br/><br/>
+	<div class="container">
+		
+
+			<div class=col-md-12>
+				<div class="col-md-4 col-md-offset-4">
+		<button ng-click="getAllUsers()" class="btn btn-primary	btn-block">Get
+			All Users &nbsp;<i class="fa fa-user-secret" aria-hidden="true"></i></button>
+			</div>
+			</div>
+
+
+		<!-- <button ng-click="getAllBlogs()" class="btn btn-danger">Get
+				All Blogs</button> -->
+
+
+		<table class="table" ng-show="allusers">
+			<caption>
+				<h3>USERS</h3>
+			</caption>
+
+			<thead>
+
+				<tr>
+					<th>User Name</th>
+					<th>Email</th>
+					<th>Phone</th>
+					<th>City</th>
+					<th>Gender</th>
+					<th>Role</th>
+					<th>Activated</th>
+					<th colspan=3 align="center">Operations</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="user in allusers">
+					<td>{{user.username}}</td>
+					<td>{{user.email}}</td>
+					<td>{{user.phone}}</td>
+					<td>{{user.city}}</td>
+					<td>{{user.gender}}</td>
+					<td>{{user.role}}</td>
+					<td>{{user.enabled}}</td>
+					<td><button class="btn btn-primary btn-sm"
+							ng-click="enableUser(user.userId)" title="Enable">
+							<i class="fa fa-check-circle-o fa-2x" aria-hidden="true"></i>
+						</button></td>
+					<td><button class="btn btn-danger btn-sm"
+							ng-click="disableUser(user.userId)" title="Disable">
+							<i class="fa fa-ban fa-2x" aria-hidden="true"></i>
+						</button></td>
+					<td><button class="btn btn-warning btn-sm" ng-click="makeAdmin(user.userId)"
+							title="Make Admin">
+							<i class="fa fa-user-secret fa-2x" aria-hidden="true"></i>
+						</button></td>
+
+				</tr>
+			</tbody>
+		</table>
+
+</div>
+	</div>
+
+
+</body>

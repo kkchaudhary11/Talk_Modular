@@ -1,0 +1,279 @@
+<style>
+
+
+
+</style>
+
+<body ng-app="myApp" ng-controller="BlogController" class="ng-cloak">
+
+<!--  -->
+<div class="container">
+
+		<div ng-show="status">
+			<p class="alert alert-info">
+				<b><i class="fa fa-check-circle" aria-hidden="true"></i></b>&nbsp{{status}}<br />
+			</p>
+		</div>
+
+		<!--
+		Create blog
+	  	-->
+
+		<div ng-if="(currentUserRole == 'ROLE_USER')">
+
+			<div class=col-md-12>
+				<div class="col-md-4 col-md-offset-4">
+					<button type="button" class="btn btn-success btn-block"
+						data-toggle="modal" data-target="#myBlog">Create Blog</button>
+				</div>
+			</div>
+
+			<!-- Modal for cerate blog -->
+			<div class="modal fade" id="myBlog" role="dialog">
+				<div class="modal-dialog modal-md">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">Create Blog</h4>
+						</div>
+						<div class="modal-body">
+							<form name="blog" action="#">
+
+								<div class="form-group"
+									ng-class="{ 'has-error': blog.title.$dirty && blog.title.$error.required }">
+
+									<div class="input-group" style="margin-top: 20px">
+										<span class="input-group-addon"><i class="fa fa-pencil"
+											aria-hidden="true"></i></span> <input type="text"
+											class="form-control" name="title" id="title"
+											placeholder="Enter title" ng-model="user.blogTitle" required>
+
+									</div>
+								
+									<span ng-show="blog.title.$dirty && blog.title.$error.required"
+										class="help-block">Required</span>
+								</div>
+
+
+								<div class="form-group"
+									ng-class="{ 'has-error': blog.my_blog.$dirty && blog.my_blog.$error.required }">
+
+									<div class="input-group" style="margin-top: 20px">
+										<span class="input-group-addon"><i
+											class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+										<textarea rows="7" class="form-control" name="my_blog"
+											id="my_blog" placeholder="Enter Description"
+											ng-model="user.blogDesc" required></textarea>
+									</div>
+									<span
+										ng-show="blog.my_blog.$dirty && blog.my_blog.$error.required"
+										class="help-block">Required</span>
+								</div>
+
+								<div class="modal-footer" style="margin-top: 20px">
+									<input type="submit" ng-click="postBlog()" value="Post"
+										class="btn btn-success" data-dismiss="modal"
+										ng-disabled="blog.title.$error.required">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		
+		<!-- 
+		ADMIN
+		 -->
+		 
+		<div ng-if="(currentUserRole == 'ROLE_ADMIN')">
+			<div>
+				
+				<div class=col-md-12>
+					<div class="col-md-4 col-md-offset-4">
+						<button ng-click="getAllBlogs()" class="btn btn-success btn-block" ><span>Admin
+							Blog Operations</span></button>
+					</div>
+				</div>
+
+
+				<h2 ng-show="allblogs">Approve Blogs</h2>
+
+				<div class="panel-group" ng-show="allblogs">
+					<div class="panel panel-default"
+						ng-repeat="blog in allblogs | orderBy:'blogdate':true"
+						style="margin-top: 40px">
+
+						<div class="panel-body">
+							<h3>{{blog.title}}</h3>
+							<hr />
+							<p style="text-align: justify">{{blog.description}}</p>
+							<hr />
+							<h5>
+								<b>Posted By:</b> {{blog.userId.username}}
+								({{blog.userId.email}}) <b>On</b> {{blog.blogdate}}
+							</h5>
+							<b>Is Published:</b> <i>{{blog.posted}}</i>
+							<div class="pull-right">
+								<a href="#/blogs" ng-click="publishBlog(blog.blogId)"><i
+									class="fa fa-check fa-2x" aria-hidden="true" title="Publish"></i></a>&nbsp
+								<a href="#/blogs" ng-click="unpublishBlog(blog.blogId)"><i
+									class="fa fa-times fa-2x" aria-hidden="true" title="Unpublish"></i></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<br>
+		
+		<!-- 
+		List Blogs
+		 -->
+		
+		<h2>Blogs</h2>
+		
+		<div>
+			<div class="panel-group" ng-show="blogs">
+			
+				<!-- from the blog table -->
+				<div class="panel panel-default"
+					ng-repeat="blog in blogs | orderBy:'blogdate':true"
+					style="margin-top: 40px">
+
+					<div class="panel-body" ng-show="currentUserRole == 'ROLE_ADMIN' || blog.userId.email == currentUser">
+						<h3>{{blog.title}}</h3>
+						<!-- 	<div ng-if="currentUser == blog.userId.email" class="pull-right">
+								<button class="btn-link">change</button>
+							</div> -->
+						<p style="text-align: justify">{{blog.description}}</p>
+						<hr />
+						<!-- From blogData table -->
+						<div ng-repeat="blogdata in blogsdata">
+							<!-- only show the data associated with the creator of blog -->
+							
+							<div
+							
+								ng-if="(blog.userId.userId == blogdata.blogId.userId.userId)">
+								<!-- match the  Blog id to  BlogData id 
+								only show data associated with perticular blog-->
+								<div ng-if="(blog.blogId == blogdata.blogId.blogId)">
+									<div class="well well-sm">
+										<p>{{blogdata.blogData }}</p>
+										<!--check if current user is the creator of blog so that he/she can update/delete blog  -->
+										<div ng-if="loggedInUser == blog.userId.email">
+											<button class="btn btn-default btn-sm"
+												ng-click="deleteBlogData(blogdata.blogDataId);">Delete</button>
+
+											<button type="button" ng-click="editrow($index)"
+												data-toggle="modal" class="btn btn-default btn-sm"
+												data-target="#updateBlogData">Edit</button>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<hr />
+						<!-- check current user with blog creator-->
+					
+						<div ng-if="loggedInUser == blog.userId.email" class="pull-right">
+							<button type="button" class="btn btn-primary btn-sm"
+								ng-click="setBlogId(blog.blogId)" data-toggle="modal"
+								data-target="#addBlogData">Add Info</button>
+							<button type="button" class="btn btn-danger btn-sm"
+								ng-click="unpublishBlog(blog.blogId)">Delete Blog</button>
+						</div>
+
+						<h5>
+							<b>Posted By:</b> {{blog.userId.username}} <b>On</b>
+							{{blog.blogdate | date:"MM/dd/yyyy"}}
+						</h5>
+					</div>
+				</div>
+			</div>
+
+
+			<!-- 
+			Modal for create blog data 
+			-->
+			
+			<div class="modal fade" id="addBlogData" role="dialog">
+				<div class="modal-dialog modal-md">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">Add info</h4>
+						</div>
+						<div class="modal-body">
+							<form name="addblogdata" action="#">
+
+								<div class="form-group"
+									ng-class="{ 'has-error': addblogdata.add_blog_data.$dirty && addblogdata.add_blog_data.$error.required }">
+									<div class="input-group" style="margin-top: 20px">
+										<span class="input-group-addon"><i class="fa fa-pencil"
+											aria-hidden="true"></i></span>
+										<textarea rows="7" class="form-control" name="add_blog_data"
+											id="add_blog_data" placeholder="Enter info"
+											ng-model="user.blogData" required></textarea>
+									</div>
+								</div>
+
+								<div class="modal-footer" style="margin-top: 20px">
+									<input type="submit" ng-click="addBlogData()" value="Post"
+										class="btn btn-primary" data-dismiss="modal"
+										ng-disabled="addblogdata.add_blog_data.$error.required">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- 
+			Modal for update blog data 
+			-->
+			
+			<div class="modal fade" id="updateBlogData" role="dialog">
+				<div class="modal-dialog modal-md">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">Edit info</h4>
+						</div>
+						<div class="modal-body">
+							<form name="editblogdata" action="#">
+								<div class="form-group"
+									ng-class="{ 'has-error': editblogdata.edit_blog_data.$dirty && editblogdata.edit_blog_data.$error.required }">
+									<div class="input-group" style="margin-top: 20px">
+										<span class="input-group-addon"><i class="fa fa-pencil"
+											aria-hidden="true"></i></span>
+										<textarea rows="7" class="form-control" name="edit_blog_data"
+											id="edit_blog_data" placeholder="Enter info"
+											ng-model="editedItem.blogData" required></textarea>
+									</div>
+								</div>
+
+								<div class="modal-footer" style="margin-top: 20px">
+									<input type="submit"
+										ng-click="updateBlogData(blogdata.blogDataId)" value="Done"
+										class="btn btn-success" data-dismiss="modal"
+										ng-disabled="editblogdata.edit_blog_data.$error.required">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+
+		</div>
+	</div>
+	
+<!--  -->
+	
+</body>

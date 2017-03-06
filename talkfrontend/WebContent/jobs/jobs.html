@@ -1,0 +1,249 @@
+<body ng-app="myApp" ng-controller="JobController">
+
+	<div class="container">
+	
+	
+		
+		
+		
+		<div ng-if="currentUserRole == 'ROLE_ADMIN'">
+		
+			<div class=col-md-12>
+				<div class="col-md-4 col-md-offset-4">
+					<button type="button" class="btn btn-success btn-block"
+						data-toggle="modal" data-target="#myJob">Create Job</button>
+
+					<button type="button" class="btn btn-success btn-block"
+						ng-click="jobsUserApplied()">View Applied Users</button>
+				</div>
+
+			</div>
+		
+		</div>
+
+		
+
+			<div class="col-md-12" style="margin-top: 10px">
+				<div ng-repeat="user in users">
+					<p class="well well-sm">
+						<span><b>{{user.userId.username}}</b></span> <span><i>({{user.userId.email}})</i></span>
+						<span><i>[PH.{{user.userId.phone}}]</i></span> <b>Applied For
+						</b> <span>{{user.jobId.title}}</span>
+					</p>
+				</div>
+			</div>
+
+			<!-- Modal for cerate job -->
+			<div class="modal fade" id="myJob" role="dialog">
+				<div class="modal-dialog modal-md">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">Create Job</h4>
+						</div>
+						<div class="modal-body">
+							<form name="job" action="#">
+
+								<div class="form-group"
+									ng-class="{ 'has-error': job.title.$dirty && job.title.$error.required }">
+
+									<div class="input-group" style="margin-top: 20px">
+										<span class="input-group-addon"><i class="fa fa-pencil"
+											aria-hidden="true"></i></span> <input type="text"
+											class="form-control" name="title" id="title"
+											placeholder="Enter title" ng-model="user.jobTitle" required>
+
+									</div>
+									<span ng-show="job.title.$dirty && job.title.$error.required"
+										class="help-block">Required</span>
+								</div>
+
+								<div class="form-group"
+									ng-class="{ 'has-error': job.qual.$dirty && job.qual.$error.required }">
+
+									<div class="input-group" style="margin-top: 20px">
+										<span class="input-group-addon"><i
+											class="fa fa-graduation-cap" aria-hidden="true"></i></span>
+										<textarea rows="3" class="form-control" name="qual" id="qual"
+											placeholder="Enter Qualification" ng-model="user.jobQual"
+											required></textarea>
+									</div>
+									<span ng-show="job.qual.$dirty && blog.qual.$error.required"
+										class="help-block">Required</span>
+								</div>
+
+								<div class="form-group"
+									ng-class="{ 'has-error': job.desc.$dirty && job.desc.$error.required }">
+
+									<div class="input-group" style="margin-top: 20px">
+										<span class="input-group-addon"><i
+											class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+										<textarea rows="7" class="form-control" name="desc" id="desc"
+											placeholder="Enter Description" ng-model="user.jobDesc"
+											required></textarea>
+									</div>
+									<span ng-show="job.desc.$dirty && blog.desc.$error.required"
+										class="help-block">Required</span>
+								</div>
+
+								<div class="modal-footer" style="margin-top: 20px">
+									<input type="submit" ng-click="postJob()" value="Post"
+										class="btn btn-success" data-dismiss="modal"
+										ng-disabled="job.desc.$error.required">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br />
+
+
+		<br>
+		<h2>Jobs</h2>
+
+		<div ng-show="status">
+			<p class="alert alert-info">
+				<b>Success!</b>&nbsp{{status}}<br />
+			</p>
+		</div>
+
+		<div>
+			<div class="panel-group" ng-show="jobs">
+				<div class="panel panel-default" ng-repeat="job in jobs"
+					style="margin-top: 40px">
+
+					<div class="panel-body">
+						<span style="font-size:x-large">
+							{{job.title}}</span>
+
+							<div ng-if="currentUserRole == 'ROLE_USER'" class="pull-right">
+								<button class="btn btn-success pull-right"
+									ng-Click="applyJob(job.jobId);">Apply</button>
+							</div>
+							
+							<div ng-if="currentUserRole == 'ROLE_ADMIN'" class="pull-right">
+							<div class="btn-group pull-right">
+								<button type="button" class="btn btn-danger btn-sm"
+									ng-click="deleteJob(job.jobId);">Delete</button>
+
+								<button type="button" class="btn btn-primary btn-sm"
+									ng-click="editrow($index)" data-toggle="modal"
+									data-target="#editJob">Update</button>
+									</div>
+
+						
+							</div>
+
+						
+						
+						<div class="modal fade" id="editJob" role="dialog">
+								<div class="modal-dialog modal-md">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal">&times;</button>
+											<h4 class="modal-title">Edit Job</h4>
+										</div>
+										<div class="modal-body">
+											<form name="editjob" action="#">
+
+								<div class="form-group"
+									ng-class="{ 'has-error': editjob.title.$dirty && editjob.title.$error.required }">
+
+									<div class="input-group" style="margin-top: 20px">
+										<span class="input-group-addon"><i class="fa fa-pencil"
+											aria-hidden="true"></i></span> <input type="text"
+											class="form-control" name="title" id="title"
+											placeholder="Enter title" ng-model="editedItem.title" required>
+
+									</div>
+									
+								</div>
+
+								<div class="form-group"
+									ng-class="{ 'has-error': editjob.qual.$dirty && editjob.qual.$error.required }">
+
+									<div class="input-group" style="margin-top: 20px">
+										<span class="input-group-addon"><i
+											class="fa fa-graduation-cap" aria-hidden="true"></i></span>
+										<textarea rows="3" class="form-control" name="qual" id="qual"
+											placeholder="Enter Qualification" ng-model="editedItem.qualification"
+											required></textarea>
+									</div>
+							
+								</div>
+
+								<div class="form-group"
+									ng-class="{ 'has-error': editjob.desc.$dirty && editjob.desc.$error.required }">
+
+									<div class="input-group" style="margin-top: 20px">
+										<span class="input-group-addon"><i
+											class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+										<textarea rows="7" class="form-control" name="desc" id="desc"
+											placeholder="Enter Description" ng-model="editedItem.description"
+											required></textarea>
+									</div>
+									
+								</div>
+
+								<div class="modal-footer" style="margin-top: 20px">
+									<button data-dismiss="modal" ng-click="editJob(editedItem.jobId)"
+										class="btn btn-primary" 
+										ng-disabled="editjob.desc.$error.required || editjob.title.$error.required">Update</button>
+								</div>
+							</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						
+						<hr />
+						<span><b>Qualifications:</b>&nbsp {{job.qualification}}</span>
+						<p style="text-align: justify">
+							<b>Description:</b>&nbsp {{job.description}}
+						</p>
+						<hr />
+						<h5>
+							<b>Posted on:</b> &nbsp{{job.postdate | date:"MM/dd/yyyy" }}
+						</h5>
+
+						<div ng-repeat="comment in comments">
+							<div ng-if="(job.jobId == comment.jobId.jobId)"
+								class="well well-sm">
+
+								<span
+									ng-class="{test: comment.jobId.jobId.userId==comment.userId.userId}">
+									{{comment.jobComment}} <br /> [<b>by</b>
+									{{comment.userId.username}} <b>on</b> {{comment.commentDate |
+									date:"MM/dd/yyyy 'at' h:mma"}}]
+								</span>
+							</div>
+						</div>
+					</div>
+
+				<div ng-if="(currentUserRole == 'ROLE_ADMIN') || (currentUserRole == 'ROLE_USER') ">
+					
+
+						<div class="panel-footer">
+
+							<form ng-submit="postComment(post);">
+								<div class="input-group">
+									<input type="text" name="comment" id="comment"
+										class="form-control" ng-model="post.comment"> <span
+										class="input-group-btn"> <input type="submit"
+										ng-click="setJobId(job.jobId)" class="btn btn-primary"
+										value="Comment">
+									</span>
+								</div>
+
+							</form>
+						</div>
+
+					
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
